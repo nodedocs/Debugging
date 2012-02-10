@@ -20,8 +20,9 @@ A good example application to experiment with is a basically 'hello world' serve
       x += 1;
       res.writeHead(200, {'Content-Type': 'text/plain'});
       res.end('Hello World ' + x);
-    }).listen(8124);
-    console.log('Server running at http://127.0.0.1:8124/');
+    }).listen(8124, function() {
+      console.log('Server running at http://127.0.0.1:8124/');
+    });
 
 First, we start your node program with debugging enabled.
 
