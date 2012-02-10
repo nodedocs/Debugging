@@ -37,7 +37,7 @@ Finally you fire up a webkit browser such as chrome or safari. and go to [http:/
 
 At this point, you will be met with a fairly empty screen with the `scripts`, `profiles`, and `console` tabs.
 
-![Node Inspector](nodeinspector.jpg)
+![Node Inspector](https://github.com/nodedocs/Debugging/raw/master/nodeinspector.jpg)
 
 ## Scripts tab
 
