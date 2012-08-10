@@ -13,16 +13,18 @@ First, ensure that node-inspector is installed:
 
 A good example application to experiment with is a basically 'hello world' server with a counter (copied from the `node-inspector` repo):
 
-    var http = require('http');
+```javascript
+var http = require('http');
 
-    var x = 0;
-    http.createServer(function (req, res) {
-      x += 1;
-      res.writeHead(200, {'Content-Type': 'text/plain'});
-      res.end('Hello World ' + x);
-    }).listen(8124, function() {
-      console.log('Server running at http://127.0.0.1:8124/');
-    });
+var x = 0;
+http.createServer(function (req, res) {
+  x += 1;
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end('Hello World ' + x);
+}).listen(8124, function() {
+  console.log('Server running at http://127.0.0.1:8124/');
+});
+```
 
 First, we start your node program with debugging enabled.
 
@@ -48,39 +50,47 @@ This is just like most webkit/firebug debuggers. It has a list of all the javasc
 
 To use the profile tab, you need a library called `v8-profiler`:
 
-    npm install v8-profiler
+    $ npm install v8-profiler
 
 Next, you have to require it inside the file you are debugging:
 
-    var profiler = require('v8-profiler');
+```javascript
+var profiler = require('v8-profiler');
+```
 
 Now you can finally enable the `profiles` tab, unfortunately, all you can do from this screen is a heap snapshot. So from the code, you need to select where you want to start to cpu profiler and can select more precise location for heap snapshots.
 
 To take a heap snapshot, just insert this line in the desired location and optionally pass it a name.
 
-    var snapshot = profiler.takeSnapshot(name);
+```javascript
+var snapshot = profiler.takeSnapshot(name);
+```
 
 To take a cpu profile, just surround the code that you are profiling with the two lines shown below.  Optionally, a name can be included to indentify the cpu profile.
 
-    profiler.startProfiling(name);
-    //..lots and lots of methods and code called..//
-    var cpuProfile = profiler.stopProfiling([name]);
+```javascript
+profiler.startProfiling(name);
+//..lots and lots of methods and code called..//
+var cpuProfile = profiler.stopProfiling([name]);
+````
 
 As an example how to use these, here is the code given earlier modified to take a cpu profile on every request and take a heap snapshot: after the server is created.
 
-    var http = require('http');
-    var profiler = require('v8-profiler');
+```javascript
+var http = require('http');
+var profiler = require('v8-profiler');
 
-    var x = 0;
-    http.createServer(function (req, res) {
-      x += 1;
-      profiler.startProfiling('request '+x);
-      res.writeHead(200, {'Content-Type': 'text/plain'});
-      res.end('Hello World ' + x);
-      profiler.stopProfiling('request '+x);
-    }).listen(8124);
-    profiler.takeSnapshot('Post-Server Snapshot');
-    console.log('Server running at http://127.0.0.1:8124/');
+var x = 0;
+http.createServer(function (req, res) {
+  x += 1;
+  profiler.startProfiling('request '+x);
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end('Hello World ' + x);
+  profiler.stopProfiling('request '+x);
+}).listen(8124);
+profiler.takeSnapshot('Post-Server Snapshot');
+console.log('Server running at http://127.0.0.1:8124/');
+```
 
 Note that despite these apis returning objects, it is much easier to sort through the data through the node-inspector interface. Hopefully with these tools, you can make more informed decisions about memory leaks and bottlenecks.
 
